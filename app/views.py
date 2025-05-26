@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.contrib import messages
 from django.urls import reverse
+from django.db.models import Exists, OuterRef, Value, BooleanField # Asegúrate de tener estas importaciones
 
 from tickets.models import Ticket
 
@@ -68,16 +69,37 @@ def home(request):
 
 @login_required
 def events(request):
+    user = request.user
     url_name = request.resolver_match.url_name
+    print(f"Parámetro GET 'favorites_only': {request.GET.get('favorites_only')}")
+    favorites_only = request.GET.get("favorites_only") == "on"
+    print(f"Valor booleano de favorites_only: {favorites_only}")
     show_past = (url_name == "events_all")
+
     if show_past:
-        events = Event.get_all_events()
+        current_events = Event.get_all_events()
     else:
-        events = Event.get_upcoming_events()
+        current_events = Event.get_upcoming_events()
+
+    if favorites_only and user.is_authenticated:
+       current_events = current_events.filter(favorites__user=user)
+
+    if user.is_authenticated:
+       final_events = current_events.annotate(
+            is_favorite=Exists(Favorite.objects.filter(user=user, event=OuterRef('pk')))
+        )
+    else:
+        final_events = current_events.annotate(
+            is_favorite=Value(False, output_field=BooleanField())
+        )
+    
+    final_events = final_events.order_by('-scheduled_at')
+
+
     return render(
         request,
         "app/events.html",
-        {"events": events, "user_is_organizer": request.user.is_organizer},
+        { "events": final_events, "user_is_organizer": user.is_organizer, "favorites_only": favorites_only },
     )
 
 
