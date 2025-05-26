@@ -3,13 +3,16 @@ import datetime
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponseRedirect
 from django.utils import timezone
+from django.contrib import messages
+from django.urls import reverse
 
 from tickets.models import Ticket
 
 from category.models import Category
 
-from .models import Event, User
+from .models import Event, User, Favorite
 
 
 def register(request):
@@ -159,3 +162,18 @@ def event_form_view(request, id):
         "event": event,
         "categories": categories,
     })
+
+@login_required
+def toggle_favorite(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    user = request.user
+    favorite, created = Favorite.objects.get_or_create(user=user, event=event)
+
+    if not created:
+        favorite.delete()
+        messages.success(request, "Evento eliminado de favoritos")
+    else:
+        messages.success(request, "Evento agregado a favoritos")
+
+    referer = request.META.get('HTTP_REFERER', reverse('events'))
+    return HttpResponseRedirect(referer)
