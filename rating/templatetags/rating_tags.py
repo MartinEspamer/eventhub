@@ -19,12 +19,12 @@ def render_rating(context, event):
 
 @register.simple_tag
 def event_rating_avg(event):
-    sum = Rating.objects.filter(event=event).aggregate(
+    stats = Rating.objects.filter(event=event).aggregate(
         avg=Avg('rating'),
         count=Count('id')
     )
-    avg = sum['avg']
-    count = sum['count']
+    avg = stats['avg']
+    count = stats['count']
 
     if count==0:
         return "Sin reseñas"
