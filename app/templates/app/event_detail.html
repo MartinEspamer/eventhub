@@ -9,11 +9,13 @@
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <h1>{{ event.title }}</h1>
+                {% if user_is_organizer and user == event.organizer %}
                 <div class="ms-3">
                     <span class="border border-1 rounded px-2 py-1 bg-light text-dark small">
                         {% event_rating_avg event %}
                     </span>
                 </div>
+                {% endif %}
             </div>
             <div>
                 {% if user_is_organizer %}
