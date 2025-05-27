@@ -35,6 +35,19 @@ class Refund(models.Model):
     )
 
     created_at = models.DateTimeField(auto_now_add=True) 
+
+    @classmethod
+    def puede_crear_para_ticket(cls, user, ticket_code):
+       
+        existente = cls.objects.filter(user=user, ticket_code=ticket_code)
+        
+        if existente.filter(status='pending').exists():
+            return False, "Ya tienes una solicitud de reembolso pendiente para este ticket. No puedes crear una nueva solicitud hasta que la anterior sea procesada."
+        
+        if existente.filter(status='approved').exists():
+            return False, "Ya tienes una solicitud de reembolso aprobada para este ticket. No puedes crear otra solicitud para el mismo ticket."
+        
+        return True, "Puedes crear la solicitud"
         
     def __str__(self):
         return f"{self.user.username} – {self.ticket_code}"
