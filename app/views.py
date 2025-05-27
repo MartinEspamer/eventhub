@@ -90,10 +90,7 @@ def events(request):
         final_events = current_events.annotate(
             is_favorite=Value(False, output_field=BooleanField())
         )
-    
-    final_events = final_events.order_by('-scheduled_at')
-
-
+        
     return render(
         request,
         "app/events.html",
