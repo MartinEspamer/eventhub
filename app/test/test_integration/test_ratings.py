@@ -52,9 +52,9 @@ class TestEventRatingsIntegration(TestCase):
             response = self.client.get(reverse("event_detail", args=[self.event1.pk]))
 
             self.assertEqual(response.status_code, 200)
-            self.assertContains(response, "2,5")
-            self.assertContains(response, "(2 Reseñas)")
-            self.assertContains(response, "<i class='bi bi-star-fill text-warning'></i>") # Icono de estrella
+            self.assertContains(response, "<strong id='avg-value'>2,5</strong>")
+            self.assertContains(response, "<span id='avg-ratings-count'>(2 Reseñas)</span>")
+            self.assertContains(response, "<i id='avg-star' class='bi bi-star-fill text-warning'></i>") # Icono de estrella
 
     def test_event_detail_avg_rating_with_no_ratings(self):
         # Login con usuario organizador

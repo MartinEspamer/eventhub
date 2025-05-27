@@ -45,8 +45,16 @@ class EventRatingAvgTest(TestCase):
             rating = 5,
             created_at = "2025-05-26 13:00"
         )
+        Rating.objects.create(
+            event=self.event,
+            user=self.user,
+            title = "test_title_3",
+            text = "test_text_3",
+            rating = 5,
+            created_at = "2025-05-26 13:00"
+        )
 
         result = event_rating_avg(self.event)
 
-        self.assertIn("4,5", result)
-        self.assertIn("(2 Reseñas)", result)
+        self.assertIn("<strong id='avg-value'>4,7</strong>", result) # Al ser 4,666..., el promedio se ve como 4,7
+        self.assertIn("<span id='avg-ratings-count'>(3 Reseñas)</span>", result)
