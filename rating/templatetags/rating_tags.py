@@ -30,4 +30,4 @@ def event_rating_avg(event):
         return "Sin reseñas"
 
     avg_formatted = f"{avg:.1f}".replace('.', ',')
-    return mark_safe(f"<strong>{avg_formatted}</strong> <i class='bi bi-star-fill text-warning'></i> ({count} Reseñas)")
+    return mark_safe(f"<strong>{avg_formatted}</strong> <i id='avg-star' class='bi bi-star-fill text-warning'></i> ({count} Reseñas)")
