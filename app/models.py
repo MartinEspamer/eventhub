@@ -85,3 +85,9 @@ class Event(models.Model):
         self.organizer = organizer or self.organizer
 
         self.save()
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="favorites")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="favorites")
+    class Meta:
+        unique_together = ('user', 'event')
