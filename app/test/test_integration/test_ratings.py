@@ -36,7 +36,7 @@ class TestEventRatingsIntegration(TestCase):
                 title = "test_title_1",
                 text = "test_text_1",
                 rating = 2,
-                created_at = "2025-05-26 12:00"
+                created_at = timezone.now(),
                 )
             Rating.objects.create(
                 event=self.event1,
@@ -44,7 +44,7 @@ class TestEventRatingsIntegration(TestCase):
                 title = "test_title_2",
                 text = "test_text_2",
                 rating = 3,
-                created_at = "2025-05-26 13:00"
+                created_at = timezone.now(),
             )
 
             # Login con usuario organizador

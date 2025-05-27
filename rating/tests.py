@@ -6,6 +6,9 @@ from app.models import Event
 from rating.models import Rating
 from rating.templatetags.rating_tags import event_rating_avg
 
+import datetime
+from django.utils import timezone
+
 class EventRatingAvgTest(TestCase):
     def setUp(self):
         User = get_user_model()
@@ -18,7 +21,7 @@ class EventRatingAvgTest(TestCase):
         self.event = Event.objects.create(
             title='test_event',
             description='test_event_description',
-            scheduled_at='2025-05-26',
+            scheduled_at=timezone.now() + datetime.timedelta(days=1),
             organizer=self.user,
         )
 
@@ -35,7 +38,7 @@ class EventRatingAvgTest(TestCase):
             title = "test_title_1",
             text = "test_text_1",
             rating = 4,
-            created_at = "2025-05-26 12:00"
+            created_at = timezone.now(),
             )
         Rating.objects.create(
             event=self.event,
@@ -43,7 +46,7 @@ class EventRatingAvgTest(TestCase):
             title = "test_title_2",
             text = "test_text_2",
             rating = 5,
-            created_at = "2025-05-26 13:00"
+            created_at = timezone.now(),
         )
         Rating.objects.create(
             event=self.event,
@@ -51,7 +54,7 @@ class EventRatingAvgTest(TestCase):
             title = "test_title_3",
             text = "test_text_3",
             rating = 5,
-            created_at = "2025-05-26 13:00"
+            created_at = timezone.now(),
         )
 
         result = event_rating_avg(self.event)

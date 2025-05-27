@@ -25,7 +25,7 @@ class TestEventRatingsE2E(BaseE2ETest):
         self.event1 = Event.objects.create(
             title="Evento 1",
             description="Descripción del evento 1",
-            scheduled_at=timezone.now() + datetime.timedelta(days=1),
+            scheduled_at = timezone.now() + datetime.timedelta(days=1),
             organizer=self.organizer,
         )
 
@@ -35,7 +35,7 @@ class TestEventRatingsE2E(BaseE2ETest):
                 title = "test_title_1",
                 text = "test_text_1",
                 rating = 1,
-                created_at = "2025-05-26 12:00"
+                created_at = timezone.now(),
                 )
         Rating.objects.create(
                 event=self.event1,
@@ -43,7 +43,7 @@ class TestEventRatingsE2E(BaseE2ETest):
                 title = "test_title_2",
                 text = "test_text_2",
                 rating = 5,
-                created_at = "2025-05-26 13:00"
+                created_at = timezone.now(),
             )
     
     def test_organizer_sees_event_rating_avg(self):
