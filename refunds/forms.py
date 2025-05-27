@@ -51,7 +51,6 @@ class RefundForm(forms.ModelForm):
         if not ticket_code or self.instance.pk:
             return ticket_code
         
-        # USAR EL NUEVO MÉTODO DEL MODELO
         can_create, message = Refund.puede_crear_para_ticket(self.user, ticket_code)
         if not can_create:
             raise forms.ValidationError(message)
