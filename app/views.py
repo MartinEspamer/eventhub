@@ -71,9 +71,7 @@ def home(request):
 def events(request):
     user = request.user
     url_name = request.resolver_match.url_name
-    print(f"Parámetro GET 'favorites_only': {request.GET.get('favorites_only')}")
     favorites_only = request.GET.get("favorites_only") == "on"
-    print(f"Valor booleano de favorites_only: {favorites_only}")
     show_past = (url_name == "events_all")
 
     if show_past:
