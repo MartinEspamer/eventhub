@@ -1,8 +1,7 @@
 from django.test import TestCase
-from django.utils import timezone
 from django.core.exceptions import ValidationError
 
-from app.models import Event, User
+from app.models import User
 from refunds.models import Refund
 
 class RefundTest(TestCase):
@@ -11,12 +10,6 @@ class RefundTest(TestCase):
             username='usuario1',
             email='user@example.com',
             password='password123'
-        )
-        self.event = Event.objects.create(
-            title='Evento Test',
-            description='Evento de prueba',
-            scheduled_at=timezone.now() + timezone.timedelta(days=5),
-            organizer=self.user
         )
         self.refund = Refund.objects.create(
             user=self.user,
