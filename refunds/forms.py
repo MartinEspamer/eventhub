@@ -41,14 +41,18 @@ class RefundForm(forms.ModelForm):
         error_messages={'required': 'Debes aceptar la política de reembolsos para continuar.'}
     )
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
     def clean_ticket_code(self):
         ticket_code = self.cleaned_data.get("ticket_code")
-
-        if not ticket_code:
+        
+        if not ticket_code or self.instance.pk:
             return ticket_code
-
-        if not self.instance.pk:
-            if Refund.objects.filter(ticket_code=ticket_code).exists():
-                raise forms.ValidationError("Ya existe una solicitud de reembolso para este ticket.")
-
+        
+        can_create, message = Refund.puede_crear_para_ticket(self.user, ticket_code)
+        if not can_create:
+            raise forms.ValidationError(message)
+    
         return ticket_code
