@@ -31,6 +31,14 @@ class User(AbstractUser):
 
 
 class Event(models.Model):
+    EVENT_STATUS_CHOICES = [
+        ('activo', 'Activo'),
+        ('cancelado', 'Cancelado'),
+        ('reprogramado', 'Reprogramado'),
+        ('agotado', 'Agotado'),
+        ('finalizado', 'Finalizado'),
+    ]
+
     title = models.CharField(max_length=200)
     description = models.TextField()
     scheduled_at = models.DateTimeField()
@@ -38,17 +46,25 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     categories = models.ManyToManyField(Category, related_name="events")
+    status = models.CharField(
+        max_length=20,
+        choices=EVENT_STATUS_CHOICES,
+        default='activo',
+    )
 
     def __str__(self):
         return self.title
-    
+
     @classmethod
     def get_upcoming_events(cls):
-        return cls.objects.filter(scheduled_at__gte=timezone.localtime()).order_by("scheduled_at")
-    
+        return cls.objects.filter(
+            scheduled_at__gte=timezone.localtime(),
+            status__in=['activo', 'reprogramado']
+        ).order_by("scheduled_at")
+
     @classmethod
     def get_all_events(cls):
-        return cls.objects.all().order_by("scheduled_at")#.reverse()
+        return cls.objects.all().order_by("scheduled_at")
 
     @classmethod
     def validate(cls, title, description, scheduled_at):
@@ -63,7 +79,7 @@ class Event(models.Model):
         return errors
 
     @classmethod
-    def new(cls, title, description, scheduled_at, organizer):
+    def new(cls, title, description, scheduled_at, organizer, status='activo'):
         errors = Event.validate(title, description, scheduled_at)
 
         if len(errors.keys()) > 0:
@@ -74,16 +90,24 @@ class Event(models.Model):
             description=description,
             scheduled_at=scheduled_at,
             organizer=organizer,
+            status=status
         )
 
         return True, None
 
-    def update(self, title, description, scheduled_at, organizer):
-        self.title = title or self.title
-        self.description = description or self.description
-        self.scheduled_at = scheduled_at or self.scheduled_at
-        self.organizer = organizer or self.organizer
-
+    def update(self, title=None, description=None, scheduled_at=None, organizer=None, status=None): 
+        
+        if title is not None:
+            self.title = title
+        if description is not None:
+            self.description = description
+        if scheduled_at is not None:
+            self.scheduled_at = scheduled_at
+        if organizer is not None:
+            self.organizer = organizer
+        if status is not None:
+            self.status = status
+        
         self.save()
 
 class Favorite(models.Model):

@@ -81,6 +81,7 @@
                 <th>Fecha</th>
                 <th>Organizador</th>
                 <th>Categorías</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -89,7 +90,7 @@
                 <tr>
                     <td class="text-primary">{{ event.title }}</td>
                     <td>{{ event.scheduled_at|date:"d b Y, H:i" }}</td>
-                    <td>{{ event.organizer }}<td>
+                    <td>{{ event.organizer }}</td><td>
                         {% if event.categories.exists %}
                         <div class="d-flex flex-wrap gap-1">
                             {% for category in event.categories.all %}
@@ -100,6 +101,7 @@
                         <span class="text-muted">Sin categoría</span>
                         {% endif %}
                     </td>
+                    <td>{{ event.get_status_display }}</td>
                     <td>
                         <div class="hstack gap-1">
                             <a href="{% url 'event_detail' event.id %}"
@@ -143,7 +145,7 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="4" class="text-center">No hay eventos disponibles</td>
+                    <td colspan="6" class="text-center">No hay eventos disponibles</td>
                 </tr>
             {% endfor %}
         </tbody>
