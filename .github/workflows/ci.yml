@@ -13,7 +13,7 @@ env:
 jobs:
 # Inciso a: Construcción del proyecto
   build:
-    name: Construcción
+    name: Construccion y Linting
     runs-on: ubuntu-latest
     
     steps:
@@ -85,6 +85,6 @@ jobs:
 
     - name: Instalar playwright
       run: python -m playwright install
-      
+
     - name: Ejecutar pruebas e2e
       run: python manage.py test app.test.test_e2e
