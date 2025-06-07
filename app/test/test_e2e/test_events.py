@@ -2,12 +2,12 @@ import datetime
 import re
 
 from django.utils import timezone
-from playwright.sync_api import expect
 from django.utils.formats import date_format
+from playwright.sync_api import expect
 
 from app.models import Event, User
-
 from app.test.test_e2e.base import BaseE2ETest
+
 
 class EventBaseTest(BaseE2ETest):
     """Clase base específica para tests de eventos"""
@@ -87,13 +87,13 @@ class EventBaseTest(BaseE2ETest):
         delete_form = row0.locator("form")
 
         expect(detail_button).to_be_visible()
-        expect(detail_button).to_have_attribute("href", f"/events/{self.event1.id}/")
+        expect(detail_button).to_have_attribute("href", f"/events/{self.event1.pk}/")
 
         if user_type == "organizador":
             expect(edit_button).to_be_visible()
-            expect(edit_button).to_have_attribute("href", f"/events/{self.event1.id}/edit/")
+            expect(edit_button).to_have_attribute("href", f"/events/{self.event1.pk}/edit/")
 
-            expect(delete_form).to_have_attribute("action", f"/events/{self.event1.id}/delete/")
+            expect(delete_form).to_have_attribute("action", f"/events/{self.event1.pk}/delete/")
             expect(delete_form).to_have_attribute("method", "POST")
 
             delete_button = delete_form.get_by_role("button", name="Eliminar")
@@ -228,7 +228,7 @@ class EventCRUDTest(EventBaseTest):
         self.page.get_by_label("Título del Evento").fill("Evento de prueba E2E")
         self.page.get_by_label("Descripción").fill("Descripción creada desde prueba E2E")
         self.page.get_by_label("Fecha").fill((timezone.localtime() + datetime.timedelta(days=60)).strftime("%Y-%m-%d"))
-        self.page.get_by_label("Hora").fill("16:45")
+        self.page.get_by_label("Hora").fill(date_format(timezone.localtime().replace(hour=16, minute=45), "H:i", use_l10n=True))
 
         # Enviar el formulario
         self.page.get_by_role("button", name="Guardar").click()
@@ -245,7 +245,7 @@ class EventCRUDTest(EventBaseTest):
 
         row = self.page.locator("table tbody tr").last
         expect(row.locator("td").nth(0)).to_have_text("Evento de prueba E2E")
-        expect(row.locator("td").nth(1)).to_have_text(timezone.localtime(timezone.localtime() + datetime.timedelta(days=60)).strftime("%d %b %Y").lower() + ", 16:45")
+        expect(row.locator("td").nth(1)).to_have_text(date_format(timezone.localtime().replace(hour=16, minute=45) + datetime.timedelta(days=60), "d M Y, H:i", use_l10n=True).lower())
 
     def test_edit_event_organizer(self):
         """Test que verifica la funcionalidad de editar un evento para organizadores"""
@@ -259,7 +259,7 @@ class EventCRUDTest(EventBaseTest):
         self.page.get_by_role("link", name="Editar").first.click()
 
         # Verificar que estamos en la página de edición
-        expect(self.page).to_have_url(f"{self.live_server_url}/events/{self.event1.id}/edit/")
+        expect(self.page).to_have_url(f"{self.live_server_url}/events/{self.event1.pk}/edit/")
 
         # header = self.page.locator("h1")
         # expect(header).to_have_text("Editar evento")
@@ -280,7 +280,7 @@ class EventCRUDTest(EventBaseTest):
 
         time = self.page.get_by_label("Hora")
         expect(time).to_have_value(self.event1.scheduled_at.strftime("%H:%M"))
-        time.fill("03:00")
+        time.fill(date_format(timezone.localtime().replace(hour=3, minute=0), "H:i", use_l10n=True))
 
         # Enviar el formulario
         self.page.get_by_role("button", name="Guardar").click()
@@ -295,9 +295,9 @@ class EventCRUDTest(EventBaseTest):
         # se recarga el evento para verificar el estado actualizado
         self.event1.refresh_from_db() 
         
-        row = self.page.locator(f"//tr[contains(td[1], 'Titulo editado')]")
+        row = self.page.locator("//tr[contains(td[1], 'Titulo editado')]")
         expect(row.locator("td").nth(0)).to_have_text("Titulo editado")
-        expect(row.locator("td").nth(1)).to_have_text(timezone.localtime(timezone.localtime() + datetime.timedelta(days=60)).strftime("%d %b %Y").lower() + ", 03:00")
+        expect(row.locator("td").nth(1)).to_have_text(date_format(timezone.localtime().replace(hour=3, minute=0) + datetime.timedelta(days=60), "d M Y, H:i", use_l10n=True).lower())
 
     def test_delete_event_organizer(self):
         """Test que verifica la funcionalidad de eliminar un evento para organizadores"""
