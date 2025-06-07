@@ -227,7 +227,7 @@ class EventCRUDTest(EventBaseTest):
         # Completar el formulario
         self.page.get_by_label("Título del Evento").fill("Evento de prueba E2E")
         self.page.get_by_label("Descripción").fill("Descripción creada desde prueba E2E")
-        self.page.get_by_label("Fecha").fill((timezone.localtime() + datetime.timedelta(days=60)).strftime("%Y-%m-%d"))
+        self.page.get_by_label("Fecha").fill(date_format(timezone.localtime() + datetime.timedelta(days=60), "Y-m-d", use_l10n=True))
         self.page.get_by_label("Hora").fill(date_format(timezone.localtime().replace(hour=16, minute=45), "H:i", use_l10n=True))
 
         # Enviar el formulario
@@ -275,11 +275,11 @@ class EventCRUDTest(EventBaseTest):
         description.fill("Descripcion Editada")
 
         date = self.page.get_by_label("Fecha")
-        expect(date).to_have_value(self.event1.scheduled_at.strftime("%Y-%m-%d"))
-        date.fill((timezone.localtime() + datetime.timedelta(days=60)).strftime("%Y-%m-%d"))
+        expect(date).to_have_value(date_format(self.event1.scheduled_at, "Y-m-d", use_l10n=True))
+        date.fill(date_format(timezone.localtime() + datetime.timedelta(days=60), "Y-m-d", use_l10n=True))
 
         time = self.page.get_by_label("Hora")
-        expect(time).to_have_value(self.event1.scheduled_at.strftime("%H:%M"))
+        expect(time).to_have_value(date_format(self.event1.scheduled_at, "H:i", use_l10n=True))
         time.fill(date_format(timezone.localtime().replace(hour=3, minute=0), "H:i", use_l10n=True))
 
         # Enviar el formulario

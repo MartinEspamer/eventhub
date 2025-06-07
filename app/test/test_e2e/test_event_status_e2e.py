@@ -3,6 +3,7 @@ import re
 
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.formats import date_format
 from playwright.sync_api import expect
 
 from app.models import Event, User
@@ -61,7 +62,7 @@ class EventStatusE2ETest(BaseE2ETest):
         self.page.fill("input[name='title']", event_title)
         self.page.fill("textarea[name='description']", "Description for E2E Test Event creation.")
 
-        future_date = (timezone.now() + datetime.timedelta(days=10)).strftime('%Y-%m-%d')
+        future_date = date_format(timezone.now() + datetime.timedelta(days=10), "Y-m-d", use_l10n=True)
         future_time = "10:00"
         self.page.fill("input[name='date']", future_date)
         self.page.fill("input[name='time']", future_time)
