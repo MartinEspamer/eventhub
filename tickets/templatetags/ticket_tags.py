@@ -1,5 +1,4 @@
 from django import template
-from django.template.defaultfilters import floatformat
 
 #Funciones para utilizar en los templates
 

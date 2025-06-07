@@ -1,8 +1,10 @@
 # category/views.py
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category
+from django.shortcuts import get_object_or_404, redirect, render
+
 from .forms import CategoryForm
+from .models import Category
+
 
 @login_required
 def category_list(request):

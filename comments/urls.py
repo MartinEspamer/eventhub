@@ -1,5 +1,12 @@
 from django.urls import path
-from .views import commentCreateView, commentUpdateView, commentDeleteView, commentDetailView, commentListView
+
+from .views import (
+    commentCreateView,
+    commentDeleteView,
+    commentDetailView,
+    commentListView,
+    commentUpdateView,
+)
 
 app_name = "comments"
 

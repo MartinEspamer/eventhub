@@ -1,13 +1,15 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
-from django.db import transaction
-from .models import Notification, UserNotificationStatus
-from .forms import NotificationForm
 
-from app.models import User, Event
+from app.models import Event, User
+
+from .forms import NotificationForm
+from .models import Notification, UserNotificationStatus
+
 
 @login_required
 def notification_management(request):

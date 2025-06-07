@@ -1,8 +1,11 @@
-from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect, render
+
+from app.models import Event
+
 from .forms import RatingForm
 from .models import Rating
-from app.models import Event
+
 
 def ratingCreateView(request, pk):
     user = request.user

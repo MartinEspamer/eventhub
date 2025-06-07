@@ -1,7 +1,8 @@
 from django import forms
-from .models import Notification, UserNotificationStatus
 
-from app.models import User, Event
+from app.models import Event, User
+
+from .models import Notification, UserNotificationStatus
 
 
 class NotificationForm(forms.ModelForm):
