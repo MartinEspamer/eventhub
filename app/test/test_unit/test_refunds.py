@@ -1,8 +1,9 @@
-from django.test import TestCase
 from django.core.exceptions import ValidationError
+from django.test import TestCase
 
 from app.models import User
 from refunds.models import Refund
+
 
 class RefundTest(TestCase):
     def setUp(self):

@@ -1,7 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse
-from app.models import User, Event, Favorite
 from django.utils.timezone import now, timedelta
+
+from app.models import Event, Favorite, User
+
 
 class FavoriteViewTest(TestCase):
     def setUp(self):
@@ -15,7 +17,7 @@ class FavoriteViewTest(TestCase):
 
     def test_toggle_favorite_add(self):
         self.client.login(username='user', password='password')
-        url = reverse('toggle_favorite', args=[self.event.id])
+        url = reverse('toggle_favorite', args=[self.event.pk])
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
@@ -24,7 +26,7 @@ class FavoriteViewTest(TestCase):
     def test_toggle_favorite_remove(self):
         self.client.login(username='user', password='password')
         Favorite.objects.create(user=self.user, event=self.event)
-        url = reverse('toggle_favorite', args=[self.event.id])
+        url = reverse('toggle_favorite', args=[self.event.pk])
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)

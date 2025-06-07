@@ -1,6 +1,9 @@
 from playwright.sync_api import expect
+
 from refunds.models import Refund
+
 from .base import BaseE2ETest
+
 
 class RefundCreationE2ETest(BaseE2ETest):
 

@@ -1,13 +1,13 @@
 import datetime
 import re
 
-from playwright.sync_api import expect
 from django.urls import reverse
 from django.utils import timezone
+from playwright.sync_api import expect
 
 from app.models import Event, User
-from category.models import Category
 from app.test.test_e2e.base import BaseE2ETest
+from category.models import Category
 
 
 class EventStatusE2ETest(BaseE2ETest):
@@ -67,7 +67,7 @@ class EventStatusE2ETest(BaseE2ETest):
         self.page.fill("input[name='time']", future_time)
 
         # Seleccionar categoría (checkbox)
-        category_checkbox_selector = f"input[name='categories'][value='{self.category.id}']"
+        category_checkbox_selector = f"input[name='categories'][value='{self.category.pk}']"
         self.page.locator(category_checkbox_selector).wait_for(state='visible')
         self.page.locator(category_checkbox_selector).check()
 
@@ -132,7 +132,7 @@ class EventStatusE2ETest(BaseE2ETest):
         edit_link_locator.click()
 
         self.page.wait_for_load_state('domcontentloaded')
-        expect(self.page).to_have_url(re.compile(self.live_server_url + expected_edit_url_path + r"$"))
+        expect(self.page).to_have_url(re.compile(self.live_server_url + str(expected_edit_url_path) + r"$"))
 
         # Seleccionar el nuevo status 'cancelado'
         self.page.locator("select[name='status']").wait_for(state='visible')
