@@ -34,11 +34,13 @@ jobs:
     - name: Ejecutar pruebas de construcción
       run: python manage.py check
 
+    - name: Linting
+      run: ruff check
+
   # Inciso b: Pruebas unitarias e integración
   test-unit-and-integration:
     name: Pruebas Unitarias e Integración
     runs-on: ubuntu-latest
-    needs: build
     
     steps:
     - name: Obtener código
@@ -65,7 +67,6 @@ jobs:
   test-e2e:
     name: Pruebas E2E
     runs-on: ubuntu-latest
-    needs: build
     
     steps:
     - name: Obtener código
