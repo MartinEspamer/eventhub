@@ -83,5 +83,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Instalar playwright
+      run: python -m playwright install
+      
     - name: Ejecutar pruebas e2e
       run: python manage.py test app.test.test_e2e
