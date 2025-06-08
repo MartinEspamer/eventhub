@@ -1,3 +1,4 @@
+from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -66,6 +67,13 @@ class TicketSimpleIntegrationTest(TestCase):
         )
 
         self.assertRedirects(response, reverse('tickets:actualizacion', args=[self.event.id])) # type: ignore
+        
+        #valida que se muestra un mensaje de error
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(len(messages) > 0)
+        self.assertTrue(any('Ticket' in str(message) for message in messages))
+        
+        #verifico que no se actualizó el ticket
         ticket1.refresh_from_db()
         self.assertEqual(ticket1.quantity, 2)
         
