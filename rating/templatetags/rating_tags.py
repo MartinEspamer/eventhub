@@ -17,6 +17,7 @@ def render_rating(context, event):
         "form": form,
     }
 
+""" 
 @register.simple_tag
 def event_rating_avg(event):
     stats = Rating.objects.filter(event=event).aggregate(
@@ -31,3 +32,4 @@ def event_rating_avg(event):
 
     avg_formatted = f"{avg:.1f}".replace('.', ',')
     return mark_safe(f"<strong id='avg-value'>{avg_formatted}</strong> <i id='avg-star' class='bi bi-star-fill text-warning'></i> <span id='avg-ratings-count'>({count} Reseñas)</span>")
+ """
