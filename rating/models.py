@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Rating(models.Model):
     # FKs
     user = models.ForeignKey(

@@ -1,5 +1,5 @@
-from django.conf import settings
 from django.db import models
+
 
 class Comment(models.Model):
     user = models.ForeignKey(
