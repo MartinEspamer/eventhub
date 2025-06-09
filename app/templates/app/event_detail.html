@@ -16,14 +16,11 @@
                         class="border border-1 rounded px-2 py-1 bg-light text-dark small"
                     >
                         {% if avg %}
-                            <strong id="avg-value">{{ avg }}</strong>
-                            <i
-                                id="avg-star"
-                                class="bi bi-star-fill text-warning"
-                            ></i>
-                            <span id="avg-ratings-count"
-                                >({{ event.ratings.count }} Reseñas)</span
-                            >
+                            <strong id='avg-value'>{{ avg }}</strong> <!-- Se mostrara con punto (".") o con coma (",") dependiendo del idioma definido en eventhub/settings.py -->
+                            <i id='avg-star' class='bi bi-star-fill text-warning'></i>
+                            <span id='avg-ratings-count'>
+                                ({{ event.ratings.count }} Reseñas)
+                            </span>
                         {% else %}
                             Sin reseñas
                         {% endif %}
