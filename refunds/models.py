@@ -1,8 +1,5 @@
-from django.db import models
-
-from django.conf import settings 
-from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.db import models
 
 # Aclaración: agrego un atributo y modifico uno existente -> status reemplaza a approved ya que 
 # en la imagen se observa que puede tener valor pendiente, aprobado o rechazado.

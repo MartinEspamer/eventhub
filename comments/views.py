@@ -1,13 +1,12 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
+from app.models import Event
+
 from .forms import CommentForm
 from .models import Comment
-from app.models import Event
-    
+
+
 def commentCreateView(request, id):
     user = request.user
     event = get_object_or_404(Event, id=id)

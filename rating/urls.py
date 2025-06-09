@@ -1,4 +1,5 @@
 from django.urls import path
+
 from .views import ratingCreateView, ratingDeleteView, ratingUpdateView
 
 app_name = "rating"
