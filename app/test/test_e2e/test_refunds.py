@@ -31,22 +31,11 @@ class RefundCreationE2ETest(BaseE2ETest):
         
         page_title = self.page.locator("h3")
         expect(page_title).to_contain_text("Formulario de Solicitud")
-        
         self.page.get_by_label("Código de ticket *").fill("1")
         self.page.get_by_label("Motivo del reembolso *").select_option(index=1) 
         self.page.get_by_label("Entiendo y acepto la política de reembolsos.").check()
-        self.page.click("button[type='submit']")
-        
-        warning_alert_locator = self.page.locator(".alert")
-        if warning_alert_locator.count() > 0:
-            warning_alert = warning_alert_locator.first
-            expect(warning_alert).to_be_visible()
-            expect(warning_alert).to_contain_text("solicitud")
-        else:
-            field_errors_locator = self.page.locator(".text-danger")
-            if field_errors_locator.count() > 0:
-                error_field = field_errors_locator.first
-                expect(error_field).to_be_visible()
-                expect(error_field).to_contain_text("solicitud")
+        self.page.locator("form#refund-form button[type='submit']").click()
 
-        self.assertEqual(Refund.objects.count(), 1)
+        field_error = self.page.locator(".text-danger", has_text="Ya tienes una solicitud de reembolso pendiente")
+        expect(field_error).to_be_visible()
+        expect(field_error).to_contain_text("solicitud de reembolso pendiente")
