@@ -1,5 +1,4 @@
 import datetime
-import time
 
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -131,7 +130,7 @@ class EventModelTest(TestCase):
 
         self.assertFalse(success)
         self.assertIsNotNone(errors)
-        self.assertIn("title", errors)
+        self.assertIn("title", errors or {})
         self.assertFalse(
             Event.objects.filter(
                 title=title, description=description, scheduled_at=scheduled_at, organizer=self.organizer
@@ -229,13 +228,12 @@ class EventViewTests(BaseEventTestCase):
         """Test que verifica la eliminación exitosa de un evento"""
         self.client.login(username="organizador", password="password123")
 
-        self.assertTrue(Event.objects.filter(pk=self.event1.id).exists())
+        self.assertTrue(Event.objects.filter(pk=self.event1.pk).exists())
 
-        response = self.client.post(reverse("event_delete", args=[self.event1.id]))
+        response = self.client.post(reverse("event_delete", args=[self.event1.pk]))
 
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse("events"))
-        self.assertFalse(Event.objects.filter(pk=self.event1.id).exists())
+        self.assertRedirects(response, reverse("events"))
+        self.assertFalse(Event.objects.filter(pk=self.event1.pk).exists())
 
     def test_event_delete_nonexistent_event(self):
         """Test que verifica el comportamiento al intentar eliminar un evento inexistente"""
@@ -254,10 +252,9 @@ class EventViewTests(BaseEventTestCase):
 
     def test_event_delete_without_login(self):
         """Test que verifica que la vista redirecciona a login si el usuario no está autenticado"""
-        self.assertTrue(Event.objects.filter(pk=self.event1.id).exists())
+        self.assertTrue(Event.objects.filter(pk=self.event1.pk).exists())
 
-        response = self.client.post(reverse("event_delete", args=[self.event1.id]))
+        response = self.client.post(reverse("event_delete", args=[self.event1.pk]))
 
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.url.startswith("/accounts/login/"))
-
+        self.assertTrue(response['Location'].startswith("/accounts/login/"))

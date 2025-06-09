@@ -1,9 +1,13 @@
 import datetime
+
 from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.formats import date_format
+
 from app.models import Event, User
 from category.models import Category
+
 
 class EventStatusIntegrationTest(TestCase):
     """
@@ -37,15 +41,15 @@ class EventStatusIntegrationTest(TestCase):
         """
         self.client.login(username=self.organizer.username, password="password123")
 
-        event_date = (timezone.now() + datetime.timedelta(days=7)).strftime('%Y-%m-%d')
-        event_time = (timezone.now() + datetime.timedelta(days=7)).strftime('%H:%M')
+        event_date = date_format(timezone.now() + datetime.timedelta(days=7), "Y-m-d", use_l10n=True)
+        event_time = date_format(timezone.now() + datetime.timedelta(days=7), "H:i", use_l10n=True)
 
         response = self.client.post(reverse('event_form'), {
             'title': 'Integration Test Event with Status',
             'description': 'Description for new event with status.',
             'date': event_date,
             'time': event_time,
-            'categories': [self.category_music.id],
+            'categories': [self.category_music.pk],
             'status': 'reprogramado', 
         })
 
@@ -60,15 +64,15 @@ class EventStatusIntegrationTest(TestCase):
         """
         self.client.login(username=self.organizer.username, password="password123")
 
-        event_date = self.event_to_edit.scheduled_at.strftime('%Y-%m-%d')
-        event_time = self.event_to_edit.scheduled_at.strftime('%H:%M')
+        event_date = date_format(self.event_to_edit.scheduled_at, "Y-m-d", use_l10n=True)
+        event_time = date_format(self.event_to_edit.scheduled_at, "H:i", use_l10n=True)
 
-        response = self.client.post(reverse('event_edit', args=[self.event_to_edit.id]), {
+        response = self.client.post(reverse('event_edit', args=[self.event_to_edit.pk]), {
             'title': 'Event to Edit Status Int', 
             'description': 'Updated description for status test.',
             'date': event_date,
             'time': event_time,
-            'categories': [self.category_sports.id],
+            'categories': [self.category_sports.pk],
             'status': 'agotado', 
         })
 
@@ -82,17 +86,17 @@ class EventStatusIntegrationTest(TestCase):
         """
         self.client.login(username=self.organizer.username, password="password123")
 
-        event_date = (timezone.now() + datetime.timedelta(days=8)).strftime('%Y-%m-%d')
-        event_time = (timezone.now() + datetime.timedelta(days=8)).strftime('%H:%M')
+        event_date = date_format(timezone.now() + datetime.timedelta(days=8), "Y-m-d", use_l10n=True)
+        event_time = date_format(timezone.now() + datetime.timedelta(days=8), "H:i", use_l10n=True)
 
         response = self.client.post(reverse('event_form'), {
             'title': 'Default Status Event',
             'description': 'Event with default status.',
             'date': event_date,
             'time': event_time,
-            'categories': [self.category_music.id],
+            'categories': [self.category_music.pk],
         })
 
         self.assertEqual(response.status_code, 302)
         event = Event.objects.get(title='Default Status Event')
-        self.assertEqual(event.status, 'activo') 
+        self.assertEqual(event.status, 'activo')

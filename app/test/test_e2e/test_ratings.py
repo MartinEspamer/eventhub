@@ -1,12 +1,14 @@
 # Test e2e para muestreo de calificaciones promedio en la página de detalle del evento
 
 import datetime
-from django.utils import timezone
 
+from django.utils import timezone
 from playwright.sync_api import expect
+
 from app.models import Event, User
-from rating.models import Rating
 from app.test.test_e2e.base import BaseE2ETest
+from rating.models import Rating
+
 
 class TestEventRatingsE2E(BaseE2ETest):
     def setUp(self):

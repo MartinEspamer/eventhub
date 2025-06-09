@@ -1,7 +1,9 @@
 from django.test import TestCase
-from app.models import User, Event, Favorite
-from category.models import Category
 from django.utils.timezone import now, timedelta
+
+from app.models import Event, Favorite, User
+from category.models import Category
+
 
 class FavoriteModelTest(TestCase):
     def setUp(self):
