@@ -1,13 +1,15 @@
 # Test unitario para la función event_rating_avg
 
-from django.test import TestCase
+import datetime
+
 from django.contrib.auth import get_user_model
+from django.test import TestCase
+from django.utils import timezone
+
 from app.models import Event
 from rating.models import Rating
 from rating.templatetags.rating_tags import event_rating_avg
 
-import datetime
-from django.utils import timezone
 
 class EventRatingAvgTest(TestCase):
     def setUp(self):

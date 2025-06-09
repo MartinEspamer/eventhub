@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from app.models import User, Event
+from app.models import Event, User
 
 
 class Notification(models.Model):

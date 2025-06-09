@@ -1,5 +1,7 @@
 from django import forms
+
 from .models import Rating
+
 
 # Formulario para la reseña
 class RatingForm(forms.ModelForm):
