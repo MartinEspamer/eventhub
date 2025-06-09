@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from app.models import Event, User
+from rating.models import Rating
 
 
 class BaseEventTestCase(TestCase):
@@ -56,6 +57,13 @@ class EventModelTest(TestCase):
             email="organizador@example.com",
             password="password123",
             is_organizer=True,
+        )
+        self.event = Event.objects.create(
+            title="Evento Test",
+            description="Descripción",
+            scheduled_at=timezone.now() + timezone.timedelta(days=1),
+            organizer=self.organizer,
+            status='activo'
         )
 
     def test_event_creation(self):
@@ -191,6 +199,27 @@ class EventModelTest(TestCase):
         self.assertEqual(updated_event.scheduled_at.replace(microsecond=0, second=0), original_scheduled_at.replace(microsecond=0, second=0))
         self.assertEqual(updated_event.status, original_status) # verificar que el status no cambió
 
+    # Tests de unidad para el método get_ratings_avg ##################################################
+
+    def test_get_ratings_avg_no_ratings(self):
+        """Debe devolver 'None' si no hay ratings"""
+        self.assertIsNone(self.event.get_ratings_avg())
+
+    def test_get_ratings_avg_with_ratings(self):
+        """Debe devolver el promedio correcto con hasta un (1) decimal"""
+        Rating.objects.create(event=self.event, user=self.organizer, rating=3, title="Titulo 1", text="Descripción 1")
+        Rating.objects.create(event=self.event, user=self.organizer, rating=4, title="Titulo 2", text="Descripción 2")
+        Rating.objects.create(event=self.event, user=self.organizer, rating=5, title="Titulo 3", text="Descripción 3")
+        self.assertEqual(self.event.get_ratings_avg(), 4.0) # (4+5+3)/3 = 4,0
+
+    def test_get_ratings_avg_rounded(self):
+        """Debe devolver el promedio redondeado a un (1) decimal"""
+        Rating.objects.create(event=self.event, user=self.organizer, rating=4, title="Titulo 1", text="Descripción 1")
+        Rating.objects.create(event=self.event, user=self.organizer, rating=5, title="Titulo 2", text="Descripción 2")
+        Rating.objects.create(event=self.event, user=self.organizer, rating=5, title="Titulo 3", text="Descripción 3")
+        self.assertEqual(self.event.get_ratings_avg(), 4.7) # (4+5+5)/3 = 4,666... = 4.7 (Redondeado a un decimal)
+
+    ##########################################################################################
 
 class EventViewTests(BaseEventTestCase):
     """Tests para las vistas de eventos que requieren el cliente y eventos pre-creados."""

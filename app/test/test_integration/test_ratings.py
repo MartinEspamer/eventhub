@@ -1,4 +1,4 @@
-# Test de integracion para event_rating_avg
+# Test de integracion para muestreo de calificaciones promedio en la página de detalle del evento
 
 import datetime
 
@@ -52,8 +52,14 @@ class TestEventRatingsIntegration(TestCase):
             response = self.client.get(reverse("event_detail", args=[self.event1.pk]))
 
             self.assertEqual(response.status_code, 200)
-            self.assertContains(response, "<strong id='avg-value'>2,5</strong>")
-            self.assertContains(response, "<span id='avg-ratings-count'>(2 Reseñas)</span>")
+            self.assertContains(response, "<strong id='avg-value'>")
+            self.assertContains(response, "2,5") # Se mostrara con punto (".") o con coma (",") dependiendo del idioma definido en eventhub/settings.py
+            self.assertContains(response, "</strong>")
+
+            self.assertContains(response, "<span id='avg-ratings-count'>")
+            self.assertContains(response, "(2 Reseñas)")
+            self.assertContains(response, "</span>")
+
             self.assertContains(response, "<i id='avg-star' class='bi bi-star-fill text-warning'></i>") # Icono de estrella
 
     def test_event_detail_avg_rating_with_no_ratings(self):

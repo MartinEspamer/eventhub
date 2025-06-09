@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Avg
 from django.utils import timezone
 
 from category.models import Category
@@ -109,6 +110,13 @@ class Event(models.Model):
             self.status = status
         
         self.save()
+
+    def get_ratings_avg(self):
+        from rating.models import Rating
+        avg = Rating.objects.filter(event=self).aggregate(avg=Avg('rating'))['avg']
+        if avg is None:
+            return None
+        return round(avg, 1)
 
 class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="favorites")

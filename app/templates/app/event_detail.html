@@ -1,22 +1,33 @@
-{% extends 'base.html' %}
-{% load comments_tags %}
-{% load rating_tags %}
-
-{% block content %}
+{% extends 'base.html' %} {% load comments_tags %} {% load rating_tags %}
+<!-- prettier-ignore -->
+{%block content %}
 <div class="container">
     <div>
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <h1>{{ event.title }}</h1>
                 {% if user_is_organizer and user == event.organizer %}
+                <!-- prettier-ignore -->
+                {% with avg=event.get_ratings_avg %}
                 <div class="ms-3">
+                    <!-- prettier-ignore -->
                     <span
                         id="avg-container"
                         class="border border-1 rounded px-2 py-1 bg-light text-dark small"
                     >
-                        {% event_rating_avg event %}
+                        {% if avg %}
+                            <strong id='avg-value'>{{ avg }}</strong> <!-- Se mostrara con punto (".") o con coma (",") dependiendo del idioma definido en eventhub/settings.py -->
+                            <i id='avg-star' class='bi bi-star-fill text-warning'></i>
+                            <span id='avg-ratings-count'>
+                                ({{ event.ratings.count }} Reseñas)
+                            </span>
+                        {% else %}
+                            Sin reseñas
+                        {% endif %}
                     </span>
                 </div>
+                {% endwith %}
+                <!-- prettier-ignore -->
                 {% endif %}
             </div>
             <div>
@@ -57,7 +68,9 @@
                     </div>
                     <div>
                         <h6 class="mb-0">Fecha y Hora</h6>
-                        <p class="mb-0">{{ event.scheduled_at|date:"d M, Y H:i" }}</p>
+                        <p class="mb-0">
+                            {{ event.scheduled_at|date:"d M, Y H:i" }}
+                        </p>
                     </div>
                 </div>
                 <div class="d-flex align-items-center mb-3">
@@ -79,20 +92,23 @@
                         <ul class="list-unstyled d-flex flex-wrap gap-2">
                             {% for category in event.categories.all %}
                             <li>
-                                <span class="badge bg-secondary p-1.5">{{ category.name }}</span>
+                                <span class="badge bg-secondary p-1.5">
+                                    {{ category.name }}
+                                </span>
                             </li>
                             {% endfor %}
                         </ul>
                         {% else %}
-                        <p class="text-muted">Este evento no tiene categorías asignadas.</p>
+                        <p class="text-muted">
+                            Este evento no tiene categorías asignadas.
+                        </p>
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    {% render_comments event %}
-    {% render_rating event %}
+    {% render_comments event %} {% render_rating event %}
 </div>
 
 {% endblock %}
