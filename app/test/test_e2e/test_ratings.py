@@ -56,6 +56,6 @@ class TestEventRatingsE2E(BaseE2ETest):
         self.page.goto(f"{self.live_server_url}/events/{self.event1.pk}/")
 
         # Verificar que la calificación promedio se muestra correctamente
-        expect(self.page.locator("#avg-value")).to_contain_text("3.0") # Se mostrara con punto (".") o con coma (",") dependiendo del idioma definido en eventhub/settings.py
+        expect(self.page.locator("#avg-value")).to_contain_text("3,0") # Se mostrara con punto (".") o con coma (",") dependiendo del idioma definido en eventhub/settings.py
         expect(self.page.locator("#avg-star")).to_be_visible()
         expect(self.page.locator("#avg-ratings-count")).to_contain_text("(2 Reseñas)")

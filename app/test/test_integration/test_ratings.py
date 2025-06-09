@@ -53,7 +53,7 @@ class TestEventRatingsIntegration(TestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertContains(response, "<strong id='avg-value'>")
-            self.assertContains(response, "2.5") # Se mostrara con punto (".") o con coma (",") dependiendo del idioma definido en eventhub/settings.py
+            self.assertContains(response, "2,5") # Se mostrara con punto (".") o con coma (",") dependiendo del idioma definido en eventhub/settings.py
             self.assertContains(response, "</strong>")
 
             self.assertContains(response, "<span id='avg-ratings-count'>")
