@@ -37,16 +37,16 @@ class RefundCreationE2ETest(BaseE2ETest):
         self.page.get_by_label("Entiendo y acepto la política de reembolsos.").check()
         self.page.click("button[type='submit']")
         
-        warning_alert = self.page.locator(".alert")
-        if warning_alert.count() > 0:
-            expect(warning_alert.first).to_be_visible()
-            alert_text = warning_alert.first.text_content()
-            self.assertIn("solicitud", alert_text.lower()) # type: ignore
+        warning_alert_locator = self.page.locator(".alert")
+        if warning_alert_locator.count() > 0:
+            warning_alert = warning_alert_locator.first
+            expect(warning_alert).to_be_visible()
+            expect(warning_alert).to_contain_text("solicitud")
         else:
-            field_errors = self.page.locator(".text-danger")
-            if field_errors.count() > 0:
-                expect(field_errors.first).to_be_visible()
-                error_text = field_errors.first.text_content()
-                self.assertIn("solicitud", error_text.lower()) # type: ignore
-        
+            field_errors_locator = self.page.locator(".text-danger")
+            if field_errors_locator.count() > 0:
+                error_field = field_errors_locator.first
+                expect(error_field).to_be_visible()
+                expect(error_field).to_contain_text("solicitud")
+
         self.assertEqual(Refund.objects.count(), 1)
