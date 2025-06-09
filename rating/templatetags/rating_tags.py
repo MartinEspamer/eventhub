@@ -1,9 +1,6 @@
 from django import template
-from django.db.models import Avg, Count
-from django.utils.safestring import mark_safe
 
 from ..forms import RatingForm
-from ..models import Rating
 
 register = template.Library()
 
