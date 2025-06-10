@@ -112,6 +112,8 @@ STATIC_URL = "/static/"
 # Bootstrap 5
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
+STATIC_ROOT = "/staticfiles/"
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
