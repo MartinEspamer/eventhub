@@ -1,9 +1,39 @@
+# Git
 .git
 .gitignore
-.env
+
+# Entornos virtuales
+.venv
+venv/
+env/
+ENV/
+
+# Archivos de configuración de IDE
+.vscode/
+.idea/
+*.swp
+
+# Archivos de Python compilados y caches
 __pycache__/
 *.pyc
-*.sqlite3 
+*.pyo
+*.pyd
+
+# Base de datos local
+db.sqlite3
+db.sqlite3-journal
+
+# Archivos de entorno local
+.env
+
+# Reportes de tests y coverage
+.coverage
+htmlcov/
 .pytest_cache/
-.vscode/ 
-*/migrations/*.pyc
+
+# Dependencias de instalación
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Documentación generada
+site/

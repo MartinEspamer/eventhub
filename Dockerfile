@@ -1,21 +1,45 @@
+# --- Etapa 1: Builder ---
+# En esta etapa se instalan las dependencias
 FROM python:3.13-slim-bullseye AS builder
-# se utiliza la imagen python:3.13-slim-bullseye ya que pesa menos 
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /eventhub
 
+# Instala las dependencias en una ubicación que copiaremos luego
+RUN pip install --upgrade pip
 COPY requirements.txt .
+RUN pip install --target=/eventhub/deps -r requirements.txt
 
-RUN pip install --upgrade pip && pip install -r requirements.txt
 
+# --- Etapa 2: Final ---
+# Esta es la imagen final, mucho más limpia y ligera
+FROM python:3.13-slim-bullseye
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /eventhub
+
+# Copia solo las dependencias instaladas desde la etapa 'builder'
+COPY --from=builder /eventhub/deps /usr/local/lib/python3.13/site-packages
+
+# Copia el código de la aplicación
 COPY . .
 
+# Reúne los archivos estáticos en un solo directorio para producción
 RUN python manage.py collectstatic --noinput
 
-RUN python manage.py migrate
+# Copia y da permisos de ejecución al script de entrada
+COPY ./entrypoint.sh /eventhub/entrypoint.sh
+RUN chmod +x /eventhub/entrypoint.sh
 
+# Expone el puerto 
 EXPOSE 8000
 
+# Establece el script de entrada que se ejecutará al iniciar el contenedor
+ENTRYPOINT ["/eventhub/entrypoint.sh"]
+
+# Comando por defecto para el servidor. Debe escuchar en 0.0.0.0
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
