@@ -2,9 +2,11 @@
 # En esta etapa se instalan las dependencias
 FROM python:3.13-slim-bullseye AS builder
 
+# Establece las variables de entorno para evitar la creación de archivos .pyc y para que Python no escriba bytecode
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+# Establece el directorio de trabajo
 WORKDIR /eventhub
 
 # Instala las dependencias en una ubicación que copiaremos luego
