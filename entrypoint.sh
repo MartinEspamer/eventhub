@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# La Secuencia de fin de linea debe ser LF (Line Feed)
 # Termina el script si un comando falla
 set -e
 
