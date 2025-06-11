@@ -33,7 +33,7 @@ jobs:
 
     - name: Crear archivo .env
       run: |
-        echo "SECRET_KEY=${{ secrets.SECRET_DJANGO_KEY }}" >> .env
+        echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
         echo "DEBUG=False" >> .env
         echo "ALLOWED_HOSTS=localhost" >> .env
 
@@ -66,7 +66,7 @@ jobs:
 
     - name: Crear archivo .env
       run: |
-        echo "SECRET_KEY=${{ secrets.SECRET_DJANGO_KEY }}" >> .env
+        echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
         echo "DEBUG=False" >> .env
         echo "ALLOWED_HOSTS=localhost" >> .env
 
@@ -99,7 +99,7 @@ jobs:
 
     - name: Crear archivo .env
       run: |
-        echo "SECRET_KEY=${{ secrets.SECRET_DJANGO_KEY }}" >> .env
+        echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
         echo "DEBUG=False" >> .env
         echo "ALLOWED_HOSTS=localhost" >> .env
 
