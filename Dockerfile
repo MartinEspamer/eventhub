@@ -9,8 +9,8 @@ WORKDIR /eventhub
 
 # Instala las dependencias en una ubicación que copiaremos luego
 RUN pip install --upgrade pip
-COPY requirements.txt .
-RUN pip install --target=/eventhub/deps -r requirements.txt
+COPY requirements-docker.txt .
+RUN pip install --target=/eventhub/deps -r requirements-docker.txt
 
 
 # --- Etapa 2: Final ---
