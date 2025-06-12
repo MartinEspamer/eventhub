@@ -30,6 +30,16 @@ Aplicaci√≥n web para venta de entradas utilizada en la cursada 2025 de Ingenier√
 
 `python manage.py runserver`
 
+## Construir Imagen de Docker
+`docker build -t eventhub .`
+
+## Crear y correr Contenedor a partir de la Imagen
+`docker run --name eventhub -p 8000:8000 --env-file .env -d eventhub`
+
+## Acceder a la aplicacion (en el navegador)
+`http://localhost:8000`
+
+
 ## Integrantes
 
 -   Espamer Martin

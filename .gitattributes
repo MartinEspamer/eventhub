@@ -1,0 +1,3 @@
+# Fuerza que los archivos de script de shell tengan fin de línea LF
+# y no CRLF, lo cual es importante para la portabilidad entre sistemas Unix y Windows.
+*.sh text eol=lf
