@@ -8,6 +8,11 @@ on:
         workflows: ["Integración Continua (CI) para EventHub"]
         types:
             - completed
+    pull_request:
+      types:
+      - closed
+      branches:
+        - main
 
 env:
     IMAGE_NAME: arisita/eventhub
