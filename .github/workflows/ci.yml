@@ -6,6 +6,8 @@ description: |
 on:
   pull_request:
     branches: [ main ]
+  release:
+      types: [published]
 
 env:
   PYTHON_VERSION: '3.12'
