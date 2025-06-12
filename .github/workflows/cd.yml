@@ -4,8 +4,10 @@ description: |
     Construye la imagen Docker, la sube al registry y notifica a Render para actualizar el servicio.
 
 on:
-    release:
-        types: [published]
+    workflow_run:
+        workflows: ["Integración Continua (CI) para EventHub"]
+        types:
+            - completed
 
 env:
     IMAGE_NAME: arisita/eventhub
@@ -16,7 +18,7 @@ jobs:
     deploy:
         name: Despliegue del Proyecto
         runs-on: ubuntu-latest
-        needs: build
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
         steps:
             - name: Obtener el código del repositorio
@@ -39,5 +41,5 @@ jobs:
 
             - name: Notificar a Render para desplegar
               run: |
-                  curl -X POST https://api.render.com/deploy/srv-${{ env.RENDER_SERVICE_ID }} \
+                  curl -X POST https://api.render.com/v1/services/${{ env.RENDER_SERVICE_ID }}/deploys \
                   -H 'Authorization: Bearer ${{ env.RENDER_API_KEY }}'

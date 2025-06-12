@@ -36,6 +36,7 @@ jobs:
         echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
         echo "DEBUG=False" >> .env
         echo "ALLOWED_HOSTS=localhost" >> .env
+        echo "CSRF_TRUSTED_ORIGIN=http://localhost:8000" >> .env
 
     - name: Ejecutar pruebas de construcción
       run: python manage.py check
@@ -102,6 +103,7 @@ jobs:
         echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
         echo "DEBUG=False" >> .env
         echo "ALLOWED_HOSTS=localhost" >> .env
+        echo "CSRF_TRUSTED_ORIGIN=http://localhost:8000" >> .env
 
     - name: Instalar playwright
       run: python -m playwright install
