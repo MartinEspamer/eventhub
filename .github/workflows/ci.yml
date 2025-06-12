@@ -6,6 +6,8 @@ description: |
 on:
   pull_request:
     branches: [ main ]
+  release:
+      types: [published]
 
 env:
   PYTHON_VERSION: '3.12'
@@ -36,6 +38,7 @@ jobs:
         echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
         echo "DEBUG=False" >> .env
         echo "ALLOWED_HOSTS=localhost" >> .env
+        echo "CSRF_TRUSTED_ORIGINS=http://localhost:8000" >> .env
 
     - name: Ejecutar pruebas de construcción
       run: python manage.py check
@@ -69,6 +72,7 @@ jobs:
         echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
         echo "DEBUG=False" >> .env
         echo "ALLOWED_HOSTS=localhost" >> .env
+        echo "CSRF_TRUSTED_ORIGINS=http://localhost:8000" >> .env
 
     - name: Ejecutar pruebas unitarias
       run: python manage.py test app.test.test_unit
@@ -102,6 +106,7 @@ jobs:
         echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
         echo "DEBUG=False" >> .env
         echo "ALLOWED_HOSTS=localhost" >> .env
+        echo "CSRF_TRUSTED_ORIGINS=http://localhost:8000" >> .env
 
     - name: Instalar playwright
       run: python -m playwright install

@@ -30,7 +30,7 @@ DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
 # El valor por defecto es para desarrollo local
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
-
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 # Application definition
 
 INSTALLED_APPS = [
